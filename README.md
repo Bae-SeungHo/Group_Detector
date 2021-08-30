@@ -4,7 +4,7 @@ Simple Group Detector with python , Opencv
 
 
 ## 0. 들어가기에 앞서
-----
+
 이 모델은 과학기술 기반 치안현장 문제해결 '과학치안 아이디어 공모전' 에 접수하며 개발한 코드이며,
 
 CV Library 에서 기본적으로 제공하는 물체 인식 알고리즘을 통하여 간단하고 빠른 사람 형태 인식 모델을 구현하였고
@@ -13,19 +13,19 @@ CV Library 에서 기본적으로 제공하는 물체 인식 알고리즘을 통
 
 
 ## 1. 사용 환경 및 라이브러리
-----
+
 
 * python == 3.6
 * cvlib - 탐지 알고리즘 사용
 * cv2 - 영상 , 사진 로드
 
 ## 2. 코드 분석
-----
+
 탐지 모델의 코드는 __Group_Check_App__ 이라는 클래스를 통해 구현하였습니다.
 
-### 2.1 생성자
+* ### 2.1 생성자
 
-```
+```python
 def __init__(self,PATH):
         if PATH == 'cam': # 캠으로 탐지
             self.cam = cv2.VideoCapture(0)
@@ -48,13 +48,15 @@ def __init__(self,PATH):
             self.Detector(PATH) #탐지 메서드
 ```
 
-PATH 라는 인자를 통해 객체를 생성하며, PATH 가 이미지라면 _self.isVideo = False_ , Path 가 동영상 , 웹캠 이라면 _self.isVideo = True_ 로 설정하게 하였습니다.
+PATH 라는 인자를 통해 객체를 생성하며, PATH 가 이미지라면 _self.isVideo = False_ ,
+
+Path 가 동영상 , 웹캠 이라면 _self.isVideo = True_ 로 설정하게 하였습니다.
 
 그 후, 윈도우를 배치하고 탐지 메서드 _self.Detector_ 를 실행하였습니다.
 
-### 2.2 Detector 메서드 - 영상
+* ### 2.2 Detector 메서드 - 영상
 
-```
+```python
 def Detector(self,PATH):
         if self.isVideo: #동영상 탐지
             print('press q to quit')
@@ -81,19 +83,23 @@ def Detector(self,PATH):
                     break
 ```
 
-_self.isVideo_ 가 True일 때, cvlib의 _detect_common_object()_ 를 통하여 영상 프레임에서 개체를 탐지합니다. (_enable_gpu_ 옵션은 CPU 만 사용하는 컴퓨터에 경우 False로 변경합니다.)
+_self.isVideo_ 가 True일 때, cvlib의 _detect_common_object()_ 를 통하여 영상 프레임에서 개체를 탐지합니다.
+
+(_enable_gpu_ 옵션은 CPU 만 사용하는 컴퓨터에 경우 False로 변경합니다.)
 
 그 후, 인식된 개체 중 object = 'person' 인 개체만 추출하는 명령어를 통하여 사람의 Bounding Box 만 persons 리스트에 저장합니다.
-```
+```python
 _ = [persons.append(rect[i]) for i in range(len(rect)) if obj[i] == 'person' and conf[i] >= 0.6]
 ```
 
-그 다음에, persons 리스트의 사람 수만큼 프레임의 사람 영역에 사각형을 그리고, 5인 이상일 경우 붉은색 , 이하일 경우 연두색으로 색을 따로 지정합니다.
+그 다음에, persons 리스트의 사람 수만큼 프레임의 사람 영역에 사각형을 그리고,
+
+5인 이상일 경우 붉은색 , 이하일 경우 연두색으로 색을 따로 지정합니다.
 
 프레임의 왼쪽 상단에는 인식된 사람의 수를 출력하는 _cv2.puttext()_ 함수도 함께 사용하였습니다.
 
 
-### 2.2 Detector 메서드 - 이미지
+* ### 2.2 Detector 메서드 - 이미지
 
 이미지의 경우 영상의 _while self.cam.isOpened():_ 구문만 빼면 거의 유사하지만 이미지가 너무 클 경우 창이 안 이쁘기 때문에
 
@@ -103,7 +109,8 @@ _cv2.resize()_ 함수를 통하여 이미지의 크기를 통일합니다.
 
 
 ## 3. 테스트
-```
+
+```python
 print('\nInput File Path (input cam to use Webcam)')
 PATH = input()
 Group_Check_App(PATH)
@@ -128,12 +135,15 @@ Dataset 폴더에 저장되어 있는 karaoke.jpg 를 불러 보았습니다.
 
 CMD 창에서 쥬피터 노트북 파일 경로로 이동한 뒤, 아래의 명령어를 입력합시다.
 
-```
+```cmd
 jupyter nbconvert [쥬피터 노트북 파일명] --to script
 ```
 ![파이썬](https://user-images.githubusercontent.com/77887166/131311868-dcba98a3-46b1-4438-922c-9942f40bcad7.PNG)
 
 파이썬 파일로 변환한 뒤에는 바로 실행할 수 있는 프로그램(.exe) 가 같은 폴더에 만들어집니다!
 
+
+
+자유롭게 재사용과 수정이 가능합니다. 
 
 Copyright (C) 2021 Bae-SeungHo all rights reserved.
